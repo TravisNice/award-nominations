@@ -32,9 +32,9 @@
 	 */
 	
 	
-	register_activation_hook ( __FILE__, 'epActivateAwardNominations' );
+	register_activation_hook ( __FILE__, 'ep_activate_award_nominations' );
 	
-	function epActivateAwardNominations() {
+	function ep_activate_award_nominations() {
 		
 		
 			// Tell WordPress what to do when the user clicks on 'deactivate'
@@ -51,7 +51,7 @@
 		
 		add_role( 'epAwardNominee', 'Nominee', array( 'read' => true ) );
 		
-		add_role( 'ep_award_judge', 'Judge', array( 'read' => true ) );
+		add_role( 'epAwardJudge', 'Judge', array( 'read' => true ) );
 		
 		
 			// Create our own pages and their templates
@@ -80,23 +80,23 @@
 		
 			//      Use the WordPress Database to store options -- This must be last as we want to store the page ID's we created
 		
-		$epan_options = array('epan_db_version'             => '1',
-				      'epan_nomination_page'        => $epanNominationPage,
-				      'epan_nominee_page'           => $epanNomineePage
-				      );
+		$epanOptions = array( 'databaseVersion' => '1',
+				      'nominationPageID' => $epanNominationPage,
+				      'nomineePageID' => $epanNomineePage
+		);
 		
-		add_option ( 'ep_award_nominations_options', $epan_options );
+		add_option ( 'epAwardNominationsOptions', $epanOptions );
 		
 		
 			// Setup our own database tables
 		
-		require_once( 'classes/epAwardNominationsController.php' );
+		require_once( 'classes/ep-award-nominations-controller.php' );
 		
 		$newDatabase = new epAwardNominationsDatabaseController;
 		
-		$newDatabase->installDatabase();
+		$newDatabase->install_database();
 		
-		$newDatabase->insertTestData();
+		$newDatabase->insert_test_data();
 		
 		
 	}
@@ -114,7 +114,7 @@
 	function ep_award_nominations_deactivate() {
 		
 		
-		unregister_setting( 'ep_award_nominations_option_group', 'ep_award_nominations_options' );
+			//	unregister_setting( 'ep_award_nominations_option_group', 'ep_award_nominations_options' );
 		
 		
 	}
@@ -127,30 +127,26 @@
 		
 		remove_role( 'epAwardNominee' );
 		
-		remove_role( 'ep_award_judge' );
+		remove_role( 'epAwardJudge' );
 		
 		
 			//      Delete our custom pages
 		
-		$options = get_option( 'ep_award_nominations_options' );
+		$options = get_option( 'epAwardNominationsOptions' );
 		
-		$postID = $options[ 'epan_nomination_page' ];
+		wp_delete_post( $options[ 'nominationPageID' ], true );
 		
-		wp_delete_post( $postID, true );
-		
-		$postID = $options[ 'epan_nominee_page' ];
-		
-		wp_delete_post( $postID, true );
+		wp_delete_post( $options[ 'nomineePageID' ], true );
 		
 		
 			//      Delete what we put into the options
 		
-		delete_option( 'ep_award_nominations_options' );
+		delete_option( 'epAwardNominationsOptions' );
 		
 		
 			//      Delete our database tables
 		
-		require_once( 'classes/epAwardNominationsController.php' );
+		require_once( 'classes/ep-award-nominations-controller.php' );
 		
 		$oldDatabase = new epAwardNominationsDatabaseController;
 		
@@ -160,29 +156,9 @@
 	}
 	
 	
-		//      This functions adds a settings link to the right of the activate and deactivate links on the plugin page
-	
-	
-	function ep_award_nominations_settings_link ( $links ) {
-		
-		
-		$settings_link = array (
-					
-					'<a href="' . admin_url ( 'options-general.php?page=ep_award_nominations_admin' ) . '">Settings</a>'
-					
-					);
-		
-		
-		return array_merge( $settings_link, $links );
-		
-	}
-	
-	add_filter ( 'plugin_action_links_' . plugin_basename ( __FILE__ ), 'ep_award_nominations_settings_link' );
-	
-	
 		//      Hand over to the Controller Class
 	
-	require_once( 'classes/epAwardNominationsController.php' );
+	require_once( 'classes/ep-award-nominations-controller.php' );
 	
 	$startControl = new epAwardNominationsController;
 
