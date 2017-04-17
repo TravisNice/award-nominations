@@ -213,6 +213,55 @@
 				
 				
 			}
+			
+			
+			public function confirmation_page() {
+				
+				
+				add_filter( 'the_title', array( $this, 'confirmation_view_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'confirmation_view_content' ) );
+				
+				
+			}
+			
+			
+			public function confirmation_view_title( $title ) {
+				
+				
+				$title = "Please confirm your nomination is correct.";
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function confirmation_view_content( $content ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				$content = '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Award:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $newModel->get_award_title( $_SESSION[ 'award' ] ) . '</p>';
+				
+				
+				if ( $newModel->get_number_categories( $_SESSION[ 'award' ] ) ) {
+					
+					
+					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Category:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $newModel->get_category_title( $_SESSION[ 'category' ] ) . '</p>';
+					
+					
+				}
+				
+				$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominee-name' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominee-reason' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee&#39; Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominee-contact' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION['nominator-first'] . ' ' . $_SESSION[ 'nominator-last' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominator-email' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Phone Number:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominator-phone' ] . '</p><form name="nomination" method="post" action=""><input type="hidden" value="1" name="confirm"><p><input type="submit" value="Confirm"></p></form>';
+				
+				return $content;
+				
+				
+			}
 	
 	
 		}

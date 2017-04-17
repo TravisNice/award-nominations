@@ -138,20 +138,7 @@
 					
 					$_SESSION[ 'nominee-name' ] = $_POST[ 'nominee-name' ];
 					
-					
-					if ( isset( $_POST[ 'nominee-reason' ] ) ) {
-						
-						
-						$_SESSION[ 'nominee-reason' ] = $_POST[ 'nominee-reason' ];
-						
-						
-					} else {
-						
-						
-						$_SESSION[ 'nominee-reason' ] = "No Reason Given";
-						
-						
-					}
+					$_SESSION[ 'nominee-reason' ] = $_POST[ 'nominee-reason' ];
 					
 					
 					if ( isset( $_POST[ 'nominee-contact' ] ) ) {
@@ -168,7 +155,48 @@
 						
 					}
 					
+					
 					$this->nominator_page();
+					
+					
+				} elseif ( isset( $_POST['nominator-first' ] ) ) {
+					
+					
+					$_SESSION[ 'nominator-first' ] = $_POST[ 'nominator-first' ];
+					
+					$_SESSION[ 'nominator-last' ] = $_POST[ 'nominator-last' ];
+					
+					if ( isset( $_POST['nominator-email' ] ) ) {
+						
+						
+						$_SESSION[ 'nominator-email' ] = $_POST[ 'nominator-email' ];
+						
+						
+					} else {
+						
+						
+						$_SESSION[ 'nominator-email' ] = "No email provided";
+						
+						
+					}
+					
+					
+					if ( isset( $_POST[ 'nominator-phone' ] ) ) {
+						
+						
+						$_SESSION[ 'nominator-phone' ] = $_POST[ 'nominator-phone' ];
+						
+						
+					} else {
+						
+						
+						$_SESSION[ 'nominator-phone' ] = "No phone given";
+						
+						
+					}
+					
+					
+					$this->confirmation_page();
 					
 					
 				} else {
@@ -249,6 +277,19 @@
 				$newView = new epAwardNominationsView;
 				
 				$newView->nominator_view();
+				
+				
+			}
+			
+			
+			public function confirmation_page() {
+				
+				
+				require( 'ep-award-nominations-view.php' );
+				
+				$newView = new epAwardNominationsView;
+				
+				$newView->confirmation_page();
 				
 				
 			}

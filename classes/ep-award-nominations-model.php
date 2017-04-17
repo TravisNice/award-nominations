@@ -101,6 +101,19 @@
 			}
 			
 			
+			public function get_award_title( $id ) {
+				
+				
+				global $wpdb;
+				
+				$result = $wpdb->get_var( "SELECT title FROM {$wpdb->prefix}epan_award WHERE id = '" . $id . "'" );
+				
+				return $result;
+				
+				
+			}
+			
+			
 			public function get_all_awards() {
 				
 				
@@ -133,6 +146,19 @@
 				global $wpdb;
 				
 				$result = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}epan_categories WHERE awardID='" . $awardID . "'" );
+				
+				return $result;
+				
+				
+			}
+			
+			
+			public function get_category_title( $id ) {
+				
+				
+				global $wpdb;
+				
+				$result = $wpdb->get_var( "SELECT title FROM {$wpdb->prefix}epan_categories WHERE id = '" . $id . "'" );
 				
 				return $result;
 				
