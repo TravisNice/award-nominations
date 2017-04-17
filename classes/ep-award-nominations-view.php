@@ -295,6 +295,46 @@
 				
 				
 			}
+			
+			
+			public function must_be_nominee() {
+				
+				
+				add_filter( 'the_title', array( $this, 'must_be_nominee_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'must_be_nominee_content' ) );
+				
+				
+			}
+			
+			
+			public function must_be_nominee_title( $title ) {
+				
+				
+				$title = "Not Logged In";
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function must_be_nominee_content( $content ) {
+				
+				
+				$content = '<p>You must be logged in as a registered nominee to use this page</p><p><a href="/my-account">Please login here</a></p>';
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function ask_question() {
+				
+				
+				
+			}
 	
 	
 		}

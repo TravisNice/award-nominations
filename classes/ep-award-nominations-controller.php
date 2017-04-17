@@ -72,6 +72,12 @@
 					if (in_the_loop()) $newPage = new epAwardNominationsNominatePageController;
 					
 					
+				} elseif ( get_the_ID() == $newModel->get_nominee_page_id() ) {
+					
+					
+					if ( in_the_loop() ) $newPage = new epAwardNominationsNomineePageController;
+					
+					
 				}
 				
 				
@@ -141,7 +147,7 @@
 					$_SESSION[ 'nominee-reason' ] = $_POST[ 'nominee-reason' ];
 					
 					
-					if ( isset( $_POST[ 'nominee-contact' ] ) ) {
+					if ( $_POST[ 'nominee-contact' ] != "" ) {
 						
 						
 						$_SESSION[ 'nominee-contact' ] = $_POST[ 'nominee-contact' ];
@@ -150,7 +156,7 @@
 					} else {
 						
 						
-						$_SESSION[ 'nominee-contact' ] = "No Email Given";
+						$_SESSION[ 'nominee-contact' ] = "No email provided";
 						
 						
 					}
@@ -166,7 +172,7 @@
 					
 					$_SESSION[ 'nominator-last' ] = $_POST[ 'nominator-last' ];
 					
-					if ( isset( $_POST['nominator-email' ] ) ) {
+					if ( $_POST['nominator-email' ] != "" ) {
 						
 						
 						$_SESSION[ 'nominator-email' ] = $_POST[ 'nominator-email' ];
@@ -181,7 +187,7 @@
 					}
 					
 					
-					if ( isset( $_POST[ 'nominator-phone' ] ) ) {
+					if ( $_POST[ 'nominator-phone' ] != "" ) {
 						
 						
 						$_SESSION[ 'nominator-phone' ] = $_POST[ 'nominator-phone' ];
@@ -190,7 +196,7 @@
 					} else {
 						
 						
-						$_SESSION[ 'nominator-phone' ] = "No phone given";
+						$_SESSION[ 'nominator-phone' ] = "No phone provided";
 						
 						
 					}
@@ -200,7 +206,7 @@
 					
 					
 				} elseif ( isset( $_POST[ 'confirm' ] ) ) {
-					
+
 					
 					require( 'ep-award-nominations-model.php' );
 					
@@ -327,6 +333,74 @@
 				$newView = new epAwardNominationsView;
 				
 				$newView->thank_you_page();
+				
+				
+			}
+			
+			
+		}
+		
+		
+	}
+	
+	
+	if ( !class_exists( 'epAwardNominationsNomineePageController' ) ) {
+		
+		
+		class epAwardNominationsNomineePageController {
+			
+			
+			public function __construct() {
+				
+				
+				$currentUser = wp_get_current_user();
+				
+				
+				if ( ! ( $currentUser instanceof WP_User ) ) {
+					
+					
+					$this->must_be_nominee();
+					
+					
+				} elseif ( $currentUser->has_cap( 'epAwardNominee' ) ) {
+					
+					
+					$this->ask_question();
+					
+					
+				} else {
+					
+					
+					$this->must_be_nominee();
+					
+					
+				}
+				
+				
+			}
+			
+			
+			public function must_be_nominee() {
+				
+				
+				require( 'ep-award-nominations-view.php' );
+				
+				$newView = new epAwardNominationsView;
+				
+				$newView->must_be_nominee();
+				
+				
+			}
+			
+			
+			public function ask_question() {
+				
+				
+				require( 'ep-award-nominations-view.php' );
+				
+				$newView = new epAwardNominationsView;
+				
+				$newView->ask_question();
 				
 				
 			}
