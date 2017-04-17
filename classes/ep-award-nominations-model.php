@@ -164,6 +164,47 @@
 				
 				
 			}
+			
+			
+			public function set_nomination( $awardID, $categoryID, $nominee, $reason, $nomineeContact, $nominatorFirst, $nominatorLast, $nominatorPhone, $nominatorEmail ) {
+				
+				
+				global $wpdb;
+				
+				$table = "{$wpdb->prefix}epan_nominations";
+				
+				$columns = array( 'awardID' => $awardID,
+						  'categoryID' => $categoryID,
+						  'nominee' => $nominee,
+						  'reason' => $reason,
+						  'nomineeContact' => $nomineeContact,
+						  'nominatorFirst' => $nominatorFirst,
+						  'nominatorLast' => $nominatorLast,
+						  'nominatorPhone' => $nominatorPhone,
+						  'nominatorEmail' => $nominatorEmail
+				);
+				
+				$types = array( '%d',
+					        '%d',
+					        '%s',
+					        '%s',
+					        '%s',
+					        '%s',
+					        '%s',
+					        '%s',
+					        '%s'
+				);
+				
+				$result = $wpdb->insert( $table, $columns, $types );
+				
+				
+			}
+			
+			
 		}
+		
+		
 	}
+	
+	
 ?>

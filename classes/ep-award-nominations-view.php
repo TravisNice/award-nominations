@@ -262,6 +262,39 @@
 				
 				
 			}
+			
+			
+			public function thank_you_page() {
+				
+				
+				add_filter( 'the_title', array( $this, 'thank_you_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'thank_you_content' ) );
+				
+				
+			}
+			
+			
+			public function thank_you_title( $title ) {
+				
+				
+				$title = 'Thank you for submitting your nomination.';
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function thank_you_content( $content ) {
+				
+				
+				$content = '<p>Thank you for your nomination.</p><p>If you think of any other worthy nominees, be sure to make another nomination. You may make as many nominations as you like.</p><p>To ensure you stay up to date with the Business Awards, like and follow our Facebook page: <a href="https://www.facebook.com/GoondiwindiChamberOfCommerce/">Goondiwindi Chamber of Commerce</a></p>';
+				
+				return $content;
+				
+				
+			}
 	
 	
 		}
