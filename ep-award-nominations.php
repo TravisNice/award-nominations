@@ -81,7 +81,7 @@
 			//      Use the WordPress Database to store options -- This must be last as we want to store the page ID's we created
 		
 		$epanOptions = array( 'databaseVersion' => '1',
-				      'nominationPageID' => $epanNominationPage,
+				      'nominatePageID' => $epanNominationPage,
 				      'nomineePageID' => $epanNomineePage
 		);
 		
@@ -134,7 +134,7 @@
 		
 		$options = get_option( 'epAwardNominationsOptions' );
 		
-		wp_delete_post( $options[ 'nominationPageID' ], true );
+		wp_delete_post( $options[ 'nominatePageID' ], true );
 		
 		wp_delete_post( $options[ 'nomineePageID' ], true );
 		
