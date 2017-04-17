@@ -199,6 +199,28 @@
 					$this->confirmation_page();
 					
 					
+				} elseif ( isset( $_POST[ 'confirm' ] ) ) {
+					
+					
+					require( 'ep-award-nominations-model.php' );
+					
+					$newModel = new epAwardNominationsModel;
+					
+					$newModel->set_nomination( $_SESSION[ 'award' ],
+								   $_SESSION[ 'category' ],
+								   $_SESSION[ 'nominee-name' ],
+								   $_SESSION[ 'nominee-reason' ],
+								   $_SESSION[ 'nominee-contact' ],
+								   $_SESSION[ 'nominator-first' ],
+								   $_SESSION[ 'nominator-last' ],
+								   $_SESSION[ 'nominator-phone' ],
+								   $_SESSION[ 'nominator-email' ]
+					);
+					
+					
+					$this->thank_you_page();
+					
+					
 				} else {
 					
 					
@@ -219,6 +241,8 @@
 					$_SESSION[ 'nominator-email' ] = null;
 					
 					$_SESSION[ 'nominator-phone' ] = null;
+					
+					$_SESSION[ 'confirm' ] = null;
 					
 					
 					$this->award_page();
@@ -290,6 +314,19 @@
 				$newView = new epAwardNominationsView;
 				
 				$newView->confirmation_page();
+				
+				
+			}
+			
+			
+			public function thank_you_page() {
+				
+				
+				require( 'ep-award-nominations-view.php' );
+				
+				$newView = new epAwardNominationsView;
+				
+				$newView->thank_you_page();
 				
 				
 			}
