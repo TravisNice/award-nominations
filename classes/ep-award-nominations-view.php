@@ -330,10 +330,136 @@
 			}
 			
 			
-			public function ask_question() {
+			public function business_question_one() {
 				
 				
+				add_filter( 'the_title', array( $this, 'business_question_one_title' ) );
 				
+				add_filter( 'the_content', array( $this, 'business_question_one_content' ) );
+				
+				
+			}
+			
+			
+			public function business_question_one_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				$title = $newModel->get_question_title( 1, 1 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function business_question_one_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				if ( $newModel->has_answered( 1, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 1, $user->ID );
+					
+					
+				} else {
+					
+					
+					$answer = "";
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 1, 1 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-one" value="">' . $answer . '</textarea></p>';
+				
+				$content .= '<p><input type="submit" value="Next"></p></form>';
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function business_question_two() {
+				
+				
+				add_filter( 'the_title', array( $this, 'business_question_two_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'business_question_two_content' ) );
+				
+				
+			}
+			
+			
+			public function business_question_two_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				$title = $newModel->get_question_title( 1, 2 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function business_question_two_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				if ( $newModel->has_answered( 2, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 2, $user->ID );
+					
+					
+				} else {
+					
+					
+					$answer = "";
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 1, 2 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-two" value="">' . $answer . '</textarea></p>';
+				
+				$content .= '<p><input type="submit" value="Next"></p></form>';
+				
+				
+				return $content;
+			
+			
 			}
 	
 	

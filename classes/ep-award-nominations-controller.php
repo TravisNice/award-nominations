@@ -206,6 +206,20 @@
 					
 					
 				} elseif ( isset( $_POST[ 'confirm' ] ) ) {
+					
+					
+					$randomNumber = rand( 100000, 999999 );
+					
+					$userdata = array( 'user_login' => $randomNumber,
+							   'user_pass' => 'Ssy-8wD-23d-pPK',
+							   'role' => 'epAwardNominee',
+							   'show_admin_bar_front' => 'false',
+							   'user_email' => $_SESSION[ 'nominee-contact' ],
+							   'nickname' => $_SESSION[ 'nominee-name' ],
+							   'description' => $_SESSION[ 'nominee-reason' ]
+					);
+					
+					$userID = wp_insert_user( $userdata );
 
 					
 					require( 'ep-award-nominations-model.php' );
@@ -217,6 +231,7 @@
 								   $_SESSION[ 'nominee-name' ],
 								   $_SESSION[ 'nominee-reason' ],
 								   $_SESSION[ 'nominee-contact' ],
+								   $userID,
 								   $_SESSION[ 'nominator-first' ],
 								   $_SESSION[ 'nominator-last' ],
 								   $_SESSION[ 'nominator-phone' ],
@@ -356,16 +371,70 @@
 				$currentUser = wp_get_current_user();
 				
 				
-				if ( ! ( $currentUser instanceof WP_User ) ) {
+				if ( ( $currentUser instanceof WP_User ) && $currentUser->has_cap( 'epAwardNominee' ) ) {
 					
 					
-					$this->must_be_nominee();
-					
-					
-				} elseif ( $currentUser->has_cap( 'epAwardNominee' ) ) {
-					
-					
-					$this->ask_question();
+					if ( isset( $_POST[ 'business-question-one' ] ) ) {
+						
+						
+						require( 'ep-award-nominations-model.php' );
+						
+						$newModel = new epAwardNominationsModel;
+						
+						$answerID = $newModel->has_answered( 1, $currentUser->ID );
+						
+						if ( $answerID ) {
+							
+							
+							$newModel->update_answer( $answerID, $_POST[ 'business-question-one' ] );
+							
+							
+						} else {
+							
+							
+							$newModel->set_answer( 1, $currentUser->ID, $_POST[ 'business-question-one' ] );
+							
+							
+						}
+						
+						
+						$this->business_question_two();
+						
+						
+					} elseif ( isset( $_POST[ 'business-question-two' ] ) ) {
+						
+						
+						require( 'ep-award-nominations-model.php' );
+						
+						$newModel = new epAwardNominationsModel;
+						
+						$answerID = $newModel->has_answered( 2, $currentUser->ID );
+						
+						if ( $answerID ) {
+							
+							
+							$newModel->update_answer( $answerID, $_POST[ 'business-question-two' ] );
+							
+							
+						} else {
+							
+							
+							$newModel->set_answer( 2, $currentUser->ID, $_POST[ 'business-question-two' ] );
+							
+							
+						}
+						
+						
+						$this->business_question_three();
+						
+						
+					} else {
+						
+						
+						$this->question_one( $currentUser );
+						
+						
+					}
 					
 					
 				} else {
@@ -393,14 +462,45 @@
 			}
 			
 			
-			public function ask_question() {
+				// DELETE LATER
+			public function question_one( $currentUser ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				if ( $newModel->get_nominee_award( $currentUser->ID ) == 1 ) {
+					
+					
+					require( 'ep-award-nominations-view.php' );
+					
+					$newView = new epAwardNominationsView;
+					
+					$newView->business_question_one();
+					
+					
+				}
+				
+				
+			}
+			
+			
+			public function business_question_two() {
 				
 				
 				require( 'ep-award-nominations-view.php' );
 				
 				$newView = new epAwardNominationsView;
 				
-				$newView->ask_question();
+				$newView->business_question_two();
+				
+				
+			}
+			
+			
+			public function business_question_three() {
 				
 				
 			}
@@ -427,7 +527,7 @@
 				
 				$wpdb->query( "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}epan_categories ( id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, awardID INT(10) UNSIGNED NOT NULL, title VARCHAR(60), description TEXT, PRIMARY KEY (id) ) {$wpdb->get_charset_collate()}" );
 				
-				$wpdb->query( "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}epan_nominations ( id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, awardID INT(10) UNSIGNED NOT NULL, categoryID INT(10) UNSIGNED NOT NULL, nominee VARCHAR(60), reason TEXT, nomineeContact VARCHAR(60), nominatorFirst VARCHAR(60), nominatorLast VARCHAR(60), nominatorPhone VARCHAR(60), nominatorEmail VARCHAR(60), PRIMARY KEY (id) ) {$wpdb->get_charset_collate()}");
+				$wpdb->query( "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}epan_nominations ( id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, awardID INT(10) UNSIGNED NOT NULL, categoryID INT(10) UNSIGNED NOT NULL, nominee VARCHAR(60), reason TEXT, nomineeContact VARCHAR(60), nomineeUserID BIGINT(20), nominatorFirst VARCHAR(60), nominatorLast VARCHAR(60), nominatorPhone VARCHAR(60), nominatorEmail VARCHAR(60), PRIMARY KEY (id) ) {$wpdb->get_charset_collate()}");
 				
 				$wpdb->query( "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}epan_questions ( id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, awardID INT(10) UNSIGNED NOT NULL, title TEXT, description LONGTEXT, PRIMARY KEY (id) ) {$wpdb->get_charset_collate()}" );
 				

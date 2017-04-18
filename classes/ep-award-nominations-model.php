@@ -58,6 +58,87 @@
 			}
 			
 			
+			public function set_nomination( $awardID, $categoryID, $nominee, $reason, $nomineeContact, $userID, $nominatorFirst, $nominatorLast, $nominatorPhone, $nominatorEmail ) {
+				
+				
+				global $wpdb;
+				
+				$table = "{$wpdb->prefix}epan_nominations";
+				
+				$columns = array( 'awardID' => $awardID,
+						 'categoryID' => $categoryID,
+						 'nominee' => $nominee,
+						 'reason' => $reason,
+						 'nomineeContact' => $nomineeContact,
+						 'nomineeUserID' => $userID,
+						 'nominatorFirst' => $nominatorFirst,
+						 'nominatorLast' => $nominatorLast,
+						 'nominatorPhone' => $nominatorPhone,
+						 'nominatorEmail' => $nominatorEmail
+				);
+				
+				$types = array( '%d',
+					       '%d',
+					       '%s',
+					       '%s',
+					       '%s',
+					       '%d',
+					       '%s',
+					       '%s',
+					       '%s',
+					       '%s'
+				);
+				
+				$result = $wpdb->insert( $table, $columns, $types );
+				
+				
+			}
+			
+			
+			public function set_answer( $question, $userID, $answer ) {
+				
+				
+				global $wpdb;
+				
+				$table = "{$wpdb->prefix}epan_answers";
+				
+				$columns = array( 'questionID' => $question,
+						  'userID' => $userID,
+						  'answer' => $answer
+				);
+				
+				$types = array( '%d',
+					        '%d',
+					        '%s'
+				);
+				
+				$result = $wpdb->insert( $table, $columns, $types );
+				
+				
+			}
+			
+			
+			public function update_answer( $id, $answer ) {
+				
+				
+				global $wpdb;
+				
+				$table = "{$wpdb->prefix}epan_answers";
+				
+				$data = array( 'answer' => $answer );
+				
+				$where = array( 'id' => $id );
+				
+				$format = array( '%s' );
+				
+				$where_format = array( '%d' );
+				
+				$result = $wpdb->update( $table, $data, $where, $format, $where_format );
+				
+				
+			}
+			
+			
 				//	GETTERS
 			
 			
@@ -166,36 +247,66 @@
 			}
 			
 			
-			public function set_nomination( $awardID, $categoryID, $nominee, $reason, $nomineeContact, $nominatorFirst, $nominatorLast, $nominatorPhone, $nominatorEmail ) {
+			public function get_nominee_award( $userID ) {
 				
 				
 				global $wpdb;
 				
-				$table = "{$wpdb->prefix}epan_nominations";
+				$result = $wpdb->get_var( "SELECT id FROM {$wpdb->prefix}epan_nominations WHERE nomineeUserID = '" . $userID . "'" );
 				
-				$columns = array( 'awardID' => $awardID,
-						  'categoryID' => $categoryID,
-						  'nominee' => $nominee,
-						  'reason' => $reason,
-						  'nomineeContact' => $nomineeContact,
-						  'nominatorFirst' => $nominatorFirst,
-						  'nominatorLast' => $nominatorLast,
-						  'nominatorPhone' => $nominatorPhone,
-						  'nominatorEmail' => $nominatorEmail
-				);
+				return $result;
 				
-				$types = array( '%d',
-					        '%d',
-					        '%s',
-					        '%s',
-					        '%s',
-					        '%s',
-					        '%s',
-					        '%s',
-					        '%s'
-				);
 				
-				$result = $wpdb->insert( $table, $columns, $types );
+			}
+			
+			
+			public function get_question_title( $awardID, $questionID ) {
+				
+				
+				global $wpdb;
+				
+				$result = $wpdb->get_var( "SELECT title FROM {$wpdb->prefix}epan_questions WHERE awardID = '" . $awardID . "' AND id = '" . $questionID . "'" );
+				
+				return $result;
+				
+				
+			}
+			
+			
+			public function get_question_description( $awardID, $questionID ) {
+				
+				
+				global $wpdb;
+				
+				$result = $wpdb->get_var( "SELECT description FROM {$wpdb->prefix}epan_questions WHERE awardID = '" . $awardID . "' AND id = '" . $questionID . "'" );
+				
+				return $result;
+				
+				
+			}
+			
+			
+			public function has_answered( $questionID, $userID ) {
+				
+				
+				global $wpdb;
+				
+				$result = $wpdb->get_var( "SELECT id FROM {$wpdb->prefix}epan_answers WHERE questionID = '" . $questionID . "' AND userID = '" . $userID . "'" );
+				
+				return $result;
+				
+				
+			}
+			
+			
+			public function get_answer( $questionID, $userID ) {
+				
+				
+				global $wpdb;
+				
+				$result = $wpdb->get_var( "SELECT answer FROM {$wpdb->prefix}epan_answers WHERE questionID = '" . $questionID . "' AND userID = '" . $userID . "'" );
+				
+				return $result;
 				
 				
 			}
