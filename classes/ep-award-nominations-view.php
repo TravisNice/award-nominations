@@ -256,7 +256,7 @@
 					
 				}
 				
-				$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominee-name' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominee-reason' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee&#39; Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominee-contact' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION['nominator-first'] . ' ' . $_SESSION[ 'nominator-last' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominator-email' ] . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Phone Number:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $_SESSION[ 'nominator-phone' ] . '</p><form name="nomination" method="post" action=""><input type="hidden" value="1" name="confirm"><p><input type="submit" value="Confirm"></p></form>';
+				$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-name' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-reason' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee&#39; Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-contact' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION['nominator-first'] ) . ' ' . esc_html( $_SESSION[ 'nominator-last' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominator-email' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Phone Number:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominator-phone' ] ) . '</p><form name="nomination" method="post" action=""><input type="hidden" value="1" name="confirm"><p><input type="submit" value="Confirm"></p></form>';
 				
 				return $content;
 				
@@ -386,9 +386,9 @@
 				
 				$content .= '<p>' . $newModel->get_question_description( 1, 1 ) . '</p>';
 				
-				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-one" value="">' . $answer . '</textarea></p>';
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-one" value="">' . esc_textarea( $answer ). '</textarea></p>';
 				
-				$content .= '<p><input type="submit" value="Next"></p></form>';
+				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
 				
 				return $content;
 				
@@ -452,14 +452,81 @@
 				
 				$content .= '<p>' . $newModel->get_question_description( 1, 2 ) . '</p>';
 				
-				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-two" value="">' . $answer . '</textarea></p>';
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-two" value="">' . esc_textarea( $answer ) . '</textarea></p>';
 				
-				$content .= '<p><input type="submit" value="Next"></p></form>';
+				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
 				
 				
 				return $content;
 			
 			
+			}
+			
+			
+			public function business_question_three() {
+				
+				
+				add_filter( 'the_title', array( $this, 'business_question_three_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'business_question_three_content' ) );
+				
+				
+			}
+			
+			
+			public function business_question_three_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				$title = $newModel->get_question_title( 1, 3 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function business_question_three_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				if ( $newModel->has_answered( 3, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 3, $user->ID );
+					
+					
+				} else {
+					
+					
+					$answer = "";
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 1, 3 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-three" value="">' . esc_html( $answer ) . '</textarea></p>';
+				
+				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
+				
+				
+				return $content;
+				
+				
 			}
 	
 	

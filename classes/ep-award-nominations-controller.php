@@ -133,7 +133,7 @@
 				} elseif ( isset( $_POST[ 'category' ] ) ) {
 					
 					
-					$_SESSION[ 'category' ] = $_POST[ 'category' ];
+					$_SESSION[ 'category' ] = $_POST['category'];
 					
 					
 					$this->nominee_page();
@@ -142,15 +142,15 @@
 				} elseif ( isset( $_POST[ 'nominee-name' ] ) ) {
 					
 					
-					$_SESSION[ 'nominee-name' ] = $_POST[ 'nominee-name' ];
+					$_SESSION[ 'nominee-name' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominee-name' ]));
 					
-					$_SESSION[ 'nominee-reason' ] = $_POST[ 'nominee-reason' ];
+					$_SESSION[ 'nominee-reason' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominee-reason' ]));
 					
 					
 					if ( $_POST[ 'nominee-contact' ] != "" ) {
 						
 						
-						$_SESSION[ 'nominee-contact' ] = $_POST[ 'nominee-contact' ];
+						$_SESSION[ 'nominee-contact' ] = sanitize_email(stripslashes_deep($_POST[ 'nominee-contact' ]));
 						
 						
 					} else {
@@ -168,14 +168,14 @@
 				} elseif ( isset( $_POST['nominator-first' ] ) ) {
 					
 					
-					$_SESSION[ 'nominator-first' ] = $_POST[ 'nominator-first' ];
+					$_SESSION[ 'nominator-first' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominator-first' ]));
 					
-					$_SESSION[ 'nominator-last' ] = $_POST[ 'nominator-last' ];
+					$_SESSION[ 'nominator-last' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominator-last' ]));
 					
 					if ( $_POST['nominator-email' ] != "" ) {
 						
 						
-						$_SESSION[ 'nominator-email' ] = $_POST[ 'nominator-email' ];
+						$_SESSION[ 'nominator-email' ] = sanitize_email(stripslashes_deep($_POST[ 'nominator-email' ]));
 						
 						
 					} else {
@@ -190,7 +190,7 @@
 					if ( $_POST[ 'nominator-phone' ] != "" ) {
 						
 						
-						$_SESSION[ 'nominator-phone' ] = $_POST[ 'nominator-phone' ];
+						$_SESSION[ 'nominator-phone' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominator-phone' ]));
 						
 						
 					} else {
@@ -386,13 +386,13 @@
 						if ( $answerID ) {
 							
 							
-							$newModel->update_answer( $answerID, $_POST[ 'business-question-one' ] );
+							$newModel->update_answer( $answerID, sanitize_text_field(stripslashes_deep($_POST[ 'business-question-one' ] )));
 							
 							
 						} else {
 							
 							
-							$newModel->set_answer( 1, $currentUser->ID, $_POST[ 'business-question-one' ] );
+							$newModel->set_answer( 1, $currentUser->ID, sanitize_text_field(stripslashes_deep($_POST[ 'business-question-one' ]) ));
 							
 							
 						}
@@ -413,19 +413,46 @@
 						if ( $answerID ) {
 							
 							
-							$newModel->update_answer( $answerID, $_POST[ 'business-question-two' ] );
+							$newModel->update_answer( $answerID, sanitize_text_field(stripslashes_deep($_POST[ 'business-question-two' ]) ));
 							
 							
 						} else {
 							
 							
-							$newModel->set_answer( 2, $currentUser->ID, $_POST[ 'business-question-two' ] );
+							$newModel->set_answer( 2, $currentUser->ID, sanitize_text_field(stripslashes_deep($_POST[ 'business-question-two' ]) ));
 							
 							
 						}
 						
 						
 						$this->business_question_three();
+						
+						
+					} elseif ( isset( $_POST[ 'business-question-three' ] ) ) {
+						
+						
+						require( 'ep-award-nominations-model.php' );
+						
+						$newModel = new epAwardNominationsModel;
+						
+						$answerID = $newModel->has_answered( 3, $currentUser->ID );
+						
+						if ( $answerID ) {
+							
+							
+							$newModel->update_answer( $answerID, sanitize_text_field(stripslashes_deep($_POST[ 'business-question-three' ]) ));
+							
+							
+						} else {
+							
+							
+							$newModel->set_answer( 3, $currentUser->ID, sanitize_text_field(stripslashes_deep($_POST[ 'business-question-three' ]) ));
+							
+							
+						}
+						
+						
+						$this->business_question_four();
 						
 						
 					} else {
@@ -462,7 +489,6 @@
 			}
 			
 			
-				// DELETE LATER
 			public function question_one( $currentUser ) {
 				
 				
@@ -502,6 +528,26 @@
 			
 			public function business_question_three() {
 				
+				
+				require( 'ep-award-nominations-view.php' );
+				
+				$newView = new epAwardNominationsView;
+				
+				$newView->business_question_three();
+				
+				
+			}
+			
+			
+			public function business_question_four() {
+				
+				/*
+				require( 'ep-award-nominations-view.php' );
+				
+				$newView = new epAwardNominationsView;
+				
+				$newView->business_question_three();
+				*/
 				
 			}
 			
