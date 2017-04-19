@@ -293,7 +293,18 @@
 				
 				$result = $wpdb->get_var( "SELECT id FROM {$wpdb->prefix}epan_answers WHERE questionID = '" . $questionID . "' AND userID = '" . $userID . "'" );
 				
-				return $result;
+				
+				if ( $result === null ) {
+					
+					
+					return 0;
+					
+					
+				} else {
+				
+					return (int)$result;
+					
+				}
 				
 				
 			}

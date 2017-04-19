@@ -1,160 +1,62 @@
 <?php
-	
-	
 	if (!class_exists('epAwardNominationsView')) {
-		
-		
 		class epAwardNominationsView {
-			
-			
 			public function award_view() {
-				
-				
 				add_filter('the_title', array($this, 'award_view_title'));
-				
 				add_filter('the_content', array($this, 'award_view_content'));
-				
-				
 			}
-			
-			
 			public function award_view_title($title) {
-				
-				
 				$title = "For which award is your nomination?";
-				
 				return $title;
-				
-				
 			}
-			
-			
 			public function award_view_content($content) {
-				
-				
 				require('ep-award-nominations-model.php');
-				
 				$newModel = new epAwardNominationsModel;
-				
 				$allAwards = $newModel->get_all_awards();
-				
-				
 				$content = '<form name="nomination" method="post" action=""><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="award" value="' . $allAwards[0]->id . '" checked>' . $allAwards[0]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allAwards[0]->description . '</p>';
-				
 				for ($i = 1; $i < $newModel->get_number_awards(); $i++) {
 					$content = $content . '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="award" value="' . $allAwards[$i]->id . '">' . $allAwards[$i]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allAwards[$i]->description . '</p>';
 				}
-				
 				$content .= '<p><input type="submit" value="Next"></p></form>';
-				
 				return $content;
-				
-				
 			}
-			
-			
 			public function category_view() {
-				
-				
 				add_filter( 'the_title', array( $this, 'category_view_title' ) );
-				
 				add_filter( 'the_content', array( $this, 'category_view_content' ) );
-				
-				
 			}
-			
-			
 			public function category_view_title( $title ) {
-				
-				
 				$title = "For which category is your nomination?";
-				
 				return $title;
-				
-				
 			}
-			
-			
 			public function category_view_content( $content ) {
-				
-				
 				require('ep-award-nominations-model.php');
-				
 				$newModel = new epAwardNominationsModel;
-				
 				$allCategories = $newModel->get_all_categories( $_SESSION[ 'award' ] );
-				
-				
 				$content = '<form name="nomination" method="post" action=""><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="category" value="'. $allCategories[0]->id . '" checked>' . $allCategories[0]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allCategories[0]->description . '</p>';
-				
 				for ( $i = 1; $i < $newModel->get_number_categories( $_SESSION[ 'award' ] ); $i++ ) {
-					
-					
 					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="category" value="'. $allCategories[$i]->id . '">' . $allCategories[$i]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allCategories[$i]->description . '</p>';
-					
-					
 				}
-				
 				$content .= '<p><input type="submit" value="Next"></p></form>';
-				
 				return $content;
-				
-				
 			}
-			
-			
 			public function nominee_view() {
-				
-				
 				add_action( 'wp_footer', array( $this, 'validate_nominee' ) );
-				
 				add_filter( 'the_title', array( $this, 'nominee_view_title' ) );
-				
 				add_filter( 'the_content', array( $this, 'nominee_view_content' ) );
-				
-				
 			}
-			
-			
 			public function nominee_view_title( $title ) {
-				
-				
 				$title = "Please explain for whom, and why you are making this nomination.";
-				
 				return $title;
-				
-				
 			}
-			
-			
 			public function nominee_view_content( $content ) {
-				
-				
 				$content = '<form name="nomination" method="post" action="" onsubmit="return validateNominee()">';
-				
-				
 				if ( $_SESSION[ 'award' ] === '2' ) {
-					
-					
 					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Employee&#39;s Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-name" value=""></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><textarea name="nominee-reason" value=""></textarea></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Employee&#39;s Email [if known]:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-contact" value=""></p>';
-					
-					
-				}
-				
-				else {
-					
-					
+				} else {
 					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Business&#39;s Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-name" value=""></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><textarea name="nominee-reason" value=""></textarea></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Business&#39;s Email [if known]:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-contact" value=""></p>';
-					
-					
 				}
-				
 				$content .= '<p><input type="submit" value="Next"></p></form>';
-				
-				
 				return $content;
-				
-				
 			}
 			
 			
@@ -256,7 +158,7 @@
 					
 				}
 				
-				$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-name' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-reason' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee&#39; Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-contact' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION['nominator-first'] ) . ' ' . esc_html( $_SESSION[ 'nominator-last' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominator-email' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Phone Number:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominator-phone' ] ) . '</p><form name="nomination" method="post" action=""><input type="hidden" value="1" name="confirm"><p><input type="submit" value="Confirm"></p></form>';
+				$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-name' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-reason' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Nominee&#39;s Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominee-contact' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION['nominator-first'] ) . ' ' . esc_html( $_SESSION[ 'nominator-last' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Email:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominator-email' ] ) . '</p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Your Phone Number:</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . esc_html( $_SESSION[ 'nominator-phone' ] ) . '</p><form name="nomination" method="post" action=""><input type="hidden" value="1" name="confirm"><p><input type="submit" value="Confirm"></p></form>';
 				
 				return $content;
 				
@@ -367,20 +269,16 @@
 				
 				$newModel = new epAwardNominationsModel;
 				
+				$answer = "";
+				
+				
 				if ( $newModel->has_answered( 1, $user->ID ) ) {
 					
 					
 					$answer = $newModel->get_answer( 1, $user->ID );
 					
 					
-				} else {
-					
-					
-					$answer = "";
-					
-					
-				}
-				
+				}				
 				
 				$content = '<form name="nomination" method="post" action="">';
 				
@@ -520,6 +418,73 @@
 				$content .= '<p>' . $newModel->get_question_description( 1, 3 ) . '</p>';
 				
 				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-three" value="">' . esc_html( $answer ) . '</textarea></p>';
+				
+				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
+				
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function business_question_four() {
+				
+				
+				add_filter( 'the_title', array( $this, 'business_question_four_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'business_question_four_content' ) );
+				
+				
+			}
+			
+			
+			public function business_question_four_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				$title = $newModel->get_question_title( 1, 4 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function business_question_four_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				if ( $newModel->has_answered( 4, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 4, $user->ID );
+					
+					
+				} else {
+					
+					
+					$answer = "";
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 1, 4 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-four" value="">' . esc_html( $answer ) . '</textarea></p>';
 				
 				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
 				
