@@ -139,6 +139,23 @@
 			}
 			
 			
+			public function insert_attachment( $targetFile, $userID ) {
+				
+				
+				global $wpdb;
+				
+				$table = "{$wpdb->prefix}epan_attachments";
+				
+				$data = array( 'userID' => $userID, 'filename' => $targetFile );
+				
+				$types = array( '%d', '%s' );
+				
+				$result = $wpdb->insert( $table, $data, $types );
+				
+				
+			}
+			
+			
 				//	GETTERS
 			
 			
@@ -260,6 +277,30 @@
 			}
 			
 			
+			public function get_nominee_category( $userID ) {
+				
+				
+				global $wpdb;
+				
+				$categoryID = $wpdb->get_var( "SELECT categoryID FROM {$wpdb->prefix}epan_nominations WHERE nomineeUserID = '" . $userID . "'" );
+				
+				return $categoryID;
+				
+				
+			}
+			
+			
+			public function get_nominee_login( $userID ) {
+				
+				$user_info = get_userdata( $userID );
+				
+				$username = $user_info->user_login;
+				
+				return $username;
+				
+			}
+			
+			
 			public function get_question_title( $awardID, $questionID ) {
 				
 				
@@ -318,6 +359,32 @@
 				$result = $wpdb->get_var( "SELECT answer FROM {$wpdb->prefix}epan_answers WHERE questionID = '" . $questionID . "' AND userID = '" . $userID . "'" );
 				
 				return $result;
+				
+				
+			}
+			
+			
+			public function has_attachment( $userID ) {
+				
+				
+				global $wpdb;
+				
+				$count = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}epan_attachments WHERE userID ='" . $userID . "'" );
+				
+				return $count;
+				
+				
+			}
+			
+			
+			public function get_nominee_name( $userID ) {
+				
+				
+				global $wpdb;
+				
+				$name = $wpdb->get_var( "SELECT nominee FROM {$wpdb->prefix}epan_nominations WHERE nomineeUserID ='" . $userID . "'" );
+				
+				return $name;
 				
 				
 			}

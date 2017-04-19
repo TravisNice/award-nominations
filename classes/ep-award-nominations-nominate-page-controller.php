@@ -51,15 +51,15 @@
 				} elseif ( isset( $_POST[ 'nominee-name' ] ) ) {
 					
 					
-					$_SESSION[ 'nominee-name' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominee-name' ]));
+					$_SESSION[ 'nominee-name' ] = stripslashes_deep($_POST[ 'nominee-name' ]);
 					
-					$_SESSION[ 'nominee-reason' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominee-reason' ]));
+					$_SESSION[ 'nominee-reason' ] = stripslashes_deep($_POST[ 'nominee-reason' ]);
 					
 					
-					if ( $_POST[ 'nominee-contact' ] != "" ) {
+					if ( $_POST[ 'nominee-contact' ] !== "" ) {
 						
 						
-						$_SESSION[ 'nominee-contact' ] = sanitize_email(stripslashes_deep($_POST[ 'nominee-contact' ]));
+						$_SESSION[ 'nominee-contact' ] = $_POST[ 'nominee-contact' ];
 						
 						
 					} else {
@@ -77,14 +77,14 @@
 				} elseif ( isset( $_POST['nominator-first' ] ) ) {
 					
 					
-					$_SESSION[ 'nominator-first' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominator-first' ]));
+					$_SESSION[ 'nominator-first' ] = stripslashes_deep($_POST[ 'nominator-first' ]);
 					
-					$_SESSION[ 'nominator-last' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominator-last' ]));
+					$_SESSION[ 'nominator-last' ] = stripslashes_deep($_POST[ 'nominator-last' ]);
 					
 					if ( $_POST['nominator-email' ] != "" ) {
 						
 						
-						$_SESSION[ 'nominator-email' ] = sanitize_email(stripslashes_deep($_POST[ 'nominator-email' ]));
+						$_SESSION[ 'nominator-email' ] = $_POST[ 'nominator-email' ];
 						
 						
 					} else {
@@ -99,7 +99,7 @@
 					if ( $_POST[ 'nominator-phone' ] != "" ) {
 						
 						
-						$_SESSION[ 'nominator-phone' ] = sanitize_text_field(stripslashes_deep($_POST[ 'nominator-phone' ]));
+						$_SESSION[ 'nominator-phone' ] = $_POST[ 'nominator-phone' ];
 						
 						
 					} else {
@@ -117,16 +117,22 @@
 				} elseif ( isset( $_POST[ 'confirm' ] ) ) {
 					
 					
-					$randomNumber = rand( 100000, 999999 );
+					$randomNumber = uniqid();
 					
-					$userdata = array( 'user_login' => (string) $randomNumber,
-							  'user_pass' => 'Ssy-8wD-23d-pPK',
-							  'role' => 'epAwardNominee',
-							  'show_admin_bar_front' => 'false',
-							  'user_email' => $_SESSION[ 'nominee-contact' ],
-							  'nickname' => $_SESSION[ 'nominee-name' ],
-							  'description' => $_SESSION[ 'nominee-reason' ]
-							  );
+					$nomineeDetails = 'Nominee\'s Name: ' . $_SESSION[ 'nominee-name' ] . PHP_EOL;
+					
+					$nomineeDetails .= 'Nominee\'s Email: ' . $_SESSION[ 'nominee-contact' ] . PHP_EOL;
+					
+					$nomineeDetails .= 'Reason for nomination: ' . $_SESSION[ 'nominee-reason' ] . PHP_EOL;
+					
+					$password = wp_generate_password();
+					
+					$userdata = array('user_login' => (string)$randomNumber,
+							  'user_pass' => $password,
+							  'role' => (string)'epAwardNominee',
+							  'show_admin_bar_front' => (bool)'false',
+							  'description' => (string)$nomineeDetails
+					);
 					
 					$userID = wp_insert_user( $userdata );
 					
@@ -135,7 +141,7 @@
 					
 					$newModel = new epAwardNominationsModel;
 					
-					$newModel->set_nomination( $_SESSION[ 'award' ],
+					$newModel->set_nomination($_SESSION[ 'award' ],
 								  $_SESSION[ 'category' ],
 								  $_SESSION[ 'nominee-name' ],
 								  $_SESSION[ 'nominee-reason' ],
@@ -145,7 +151,26 @@
 								  $_SESSION[ 'nominator-last' ],
 								  $_SESSION[ 'nominator-phone' ],
 								  $_SESSION[ 'nominator-email' ]
-								  );
+					);
+					
+					
+					$to = "travis.nice@everydaypublishing.com.au,chamber@goondiwindi.qld.au";
+					
+					$subject = "New Nomination";
+					
+					$message  = "Nominee: " . $_SESSION[ 'nominee-name' ] . PHP_EOL;
+					$message .= "Award: " . $newModel->get_award_title( $_SESSION[ 'award' ] ) . PHP_EOL;
+					$message .= "Category: " . $newModel->get_category_title( $_SESSION[ 'category' ] ) . PHP_EOL;
+					$message .= "Reason: " . $_SESSION[ 'nominee-reason' ] . PHP_EOL;
+					$message .= "Contact: " . $_SESSION[ 'nominee-contact' ] . PHP_EOL;
+					$message .= PHP_EOL;
+					$message .= "Nominator: " . $_SESSION[ 'nominator-first' ] . " " . $_SESSION[ 'nominator-last' ] . PHP_EOL;
+					$message .= "Contact: " . $_SESSION[ 'nominator-phone' ] . " or " . $_SESSION[ 'nominator-email' ];
+					$message .= PHP_EOL;
+					$message .= "This nomination was assigned user (login) name: " . $newModel->get_nominee_login( $userID ) . PHP_EOL;
+					$message .= "        With Password: " . $password . PHP_EOL;
+					
+					wp_mail( $to, $subject, $message );
 					
 					
 					$this->thank_you_page();

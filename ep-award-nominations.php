@@ -156,6 +156,10 @@
 	}
 	
 	
+	add_filter( 'send_password_change_email', '__return_false' );
+	apply_filters( 'wp_mail_from_name', "Goondiwindi Chamber of Commerce" );
+	
+	
 		//      Hand over to the Controller Class
 	
 	require_once( 'classes/ep-award-nominations-controller.php' );

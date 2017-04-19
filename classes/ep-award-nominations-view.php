@@ -28,35 +28,106 @@
 				$title = "For which category is your nomination?";
 				return $title;
 			}
+			
+			
 			public function category_view_content( $content ) {
+			
+				
 				require('ep-award-nominations-model.php');
+				
 				$newModel = new epAwardNominationsModel;
+				
 				$allCategories = $newModel->get_all_categories( $_SESSION[ 'award' ] );
+				
+				
 				$content = '<form name="nomination" method="post" action=""><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="category" value="'. $allCategories[0]->id . '" checked>' . $allCategories[0]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allCategories[0]->description . '</p>';
+				
+				
 				for ( $i = 1; $i < $newModel->get_number_categories( $_SESSION[ 'award' ] ); $i++ ) {
+				
+					
 					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="category" value="'. $allCategories[$i]->id . '">' . $allCategories[$i]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allCategories[$i]->description . '</p>';
+				
+				
 				}
+				
+				
 				$content .= '<p><input type="submit" value="Next"></p></form>';
+				
 				return $content;
+			
+			
 			}
+			
+			
 			public function nominee_view() {
+			
+				
 				add_action( 'wp_footer', array( $this, 'validate_nominee' ) );
+				
 				add_filter( 'the_title', array( $this, 'nominee_view_title' ) );
+				
 				add_filter( 'the_content', array( $this, 'nominee_view_content' ) );
+			
+			
 			}
+			
+			
 			public function nominee_view_title( $title ) {
+			
+				
 				$title = "Please explain for whom, and why you are making this nomination.";
+				
 				return $title;
+			
+			
 			}
+			
+			
 			public function nominee_view_content( $content ) {
+				
+				
 				$content = '<form name="nomination" method="post" action="" onsubmit="return validateNominee()">';
+				
+				
 				if ( $_SESSION[ 'award' ] === '2' ) {
-					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Employee&#39;s Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-name" value=""></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><textarea name="nominee-reason" value=""></textarea></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Employee&#39;s Email [if known]:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-contact" value=""></p>';
+					
+					
+					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Employee&#39;s Name:</h2>';
+					
+					$content .= '<p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-name" value=""></p>';
+					
+					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason: (Inlcude Employer\'s Name Here)</h2>';
+					
+					$content .= '<p style="color: #000; font-size: 15px; max-width: 300px;"><textarea name="nominee-reason" value=""></textarea></p>';
+					
+					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Employee&#39;s Email [if known]:</h2>';
+					
+					$content .= '<p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-contact" value=""></p>';
+					
+					
 				} else {
-					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Business&#39;s Name:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-name" value=""></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><textarea name="nominee-reason" value=""></textarea></p><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Business&#39;s Email [if known]:</h2><p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-contact" value=""></p>';
+					
+					
+					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Business&#39;s Name:</h2>';
+					
+					$content .= '<p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-name" value=""></p>';
+					
+					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Reason:</h2>';
+					
+					$content .= '<p style="color: #000; font-size: 15px; max-width: 300px;"><textarea name="nominee-reason" value=""></textarea></p>';
+					
+					$content .= '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;">Business&#39;s Email [if known]:</h2>';
+					
+					$content .= '<p style="color: #000; font-size: 15px; max-width: 300px;"><input type="text" name="nominee-contact" value=""></p>';
 				}
+				
+				
 				$content .= '<p><input type="submit" value="Next"></p></form>';
+				
 				return $content;
+				
+				
 			}
 			
 			
@@ -286,7 +357,11 @@
 				
 				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-one" value="">' . esc_textarea( $answer ). '</textarea></p>';
 				
-				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
 				
 				return $content;
 				
@@ -352,7 +427,11 @@
 				
 				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-two" value="">' . esc_textarea( $answer ) . '</textarea></p>';
 				
-				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
 				
 				
 				return $content;
@@ -419,7 +498,11 @@
 				
 				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-three" value="">' . esc_html( $answer ) . '</textarea></p>';
 				
-				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
 				
 				
 				return $content;
@@ -486,11 +569,547 @@
 				
 				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-four" value="">' . esc_html( $answer ) . '</textarea></p>';
 				
-				$content .= '<p><input type="submit" value="Save & Next"></p></form>';
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
 				
 				
 				return $content;
 				
+				
+			}
+			
+			
+			public function business_question_five() {
+				
+				
+				add_filter( 'the_title', array( $this, 'business_question_five_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'business_question_five_content' ) );
+				
+				
+			}
+			
+			
+			public function business_question_five_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				$title = $newModel->get_question_title( 1, 5 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function business_question_five_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				$answer = "";
+				
+				
+				if ( $newModel->has_answered( 5, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 5, $user->ID );
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 1, 5 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-five" value="">' . esc_html( $answer ) . '</textarea></p>';
+				
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
+				
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function business_question_six() {
+				
+				
+				add_filter( 'the_title', array( $this, 'business_question_six_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'business_question_six_content' ) );
+				
+				
+			}
+			
+			
+			public function business_question_six_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				$title = $newModel->get_question_title( 1, 6 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function business_question_six_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				$answer = "";
+				
+				
+				if ( $newModel->has_answered( 6, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 6, $user->ID );
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 1, 6 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="business-question-six" value="">' . esc_html( $answer ) . '</textarea></p>';
+				
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
+				
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function employee_question_one() {
+				
+				
+				add_filter( 'the_title', array( $this, 'employee_question_one_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'employee_question_one_content' ) );
+				
+				
+			}
+			
+			
+			public function employee_question_one_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				$title = $newModel->get_question_title( 2, 7 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function employee_question_one_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				$answer = "";
+				
+				
+				if ( $newModel->has_answered( 7, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 7, $user->ID );
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 2, 7 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="employee-question-one" value="">' . esc_textarea( $answer ). '</textarea></p>';
+				
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function innovation_question_one() {
+				
+				
+				add_filter( 'the_title', array( $this, 'innovation_question_one_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'innovation_question_one_content' ) );
+				
+				
+			}
+			
+			
+			public function innovation_question_one_title( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				
+				$title = $newModel->get_question_title( 3, 8 );
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function innovation_question_one_content( $content ) {
+				
+				
+				$user = wp_get_current_user();
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				
+				$newModel = new epAwardNominationsModel;
+				
+				$answer = "";
+				
+				
+				if ( $newModel->has_answered( 8, $user->ID ) ) {
+					
+					
+					$answer = $newModel->get_answer( 8, $user->ID );
+					
+					
+				}
+				
+				
+				$content = '<form name="nomination" method="post" action="">';
+				
+				$content .= '<p>' . $newModel->get_question_description( 3, 8 ) . '</p>';
+				
+				$content .= '<p style="color: #000; font-size: 15px; max-width: 600px;"><textarea name="innovation-question-one" value="">' . esc_textarea( $answer ). '</textarea></p>';
+				
+				$content .= '<button name="submit" value="next" style="margin: 16px 16px 16px 0;">Save & Next</button>';
+				
+				$content .= '<button name="submit" value="end" style="margin: 16px 16px 16px 0;">Save & End</button>';
+				
+				$content .= '</form>';
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function video_upload() {
+				
+				add_action( 'wp_footer', array( $this, 'video_upload_scripts' ) );
+				
+				add_filter( 'the_title', array( $this, 'video_upload_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'video_upload_content' ) );
+				
+			}
+			
+			
+			public function video_upload_scripts() {
+				
+				$file = EP_AWARD_NOMINATIONS_PATH . "/includes/file-upload-scripts.php";
+				
+				include( $file );
+				
+			}
+			
+			
+			public function video_upload_title( $title ) {
+				
+				
+				$title = "Video Upload";
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function video_upload_content( $content ) {
+				
+				
+				$content = '<p>Here\'s where you can really shine. Upload a short 30 to 90 second video of you, your business, or your products and services. This video counts towards at least 10% of the judges total, depending on the category of your nomination.</p><p>Note: Your video will be put on display the night of the awards ceremony, so put your best foot forward.</p><p>The file upload size is limited to 250MB.</p>';
+				
+				$content .= '<form action="" name="nomination" method="post" enctype="multipart/form-data" id="uploadForm">';
+				
+				$content .= '<p>Select video to upload:</p>';
+								
+				$content .= '<input type="file" name="fileToUpload" id="fileToUpload" class="demoInputBox" id="userImage">';
+				
+				$content .= '<p><button name="video-submit" value="next" style="margin: 16px 16px 16px 0;">Upload & Next</button>';
+				
+				$content .= '<button name="video-submit" value="end" style="margin: 16px 16px 16px 0;">Skip Upload</button></p>';
+				
+				$content .= '<div id="progress-div"><div id="progress-bar"></div></div><div id="targetLayer"></div>';
+				
+				$content .= '</form>';
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function video_too_large() {
+				
+				
+				add_filter( 'the_title', array( $this, 'video_too_large_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'video_too_large_content' ) );
+				
+				
+			}
+			
+			
+			public function video_too_large_title( $title ) {
+				
+				
+				$title = "Too Big";
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function video_too_large_content( $content ) {
+				
+				
+				$content = '<p>Your video is too large to upload.</p><p>The file upload size is limited to 250MB.</p><p>Please try again with a smaller file.</p>';
+				
+				$content .= '<form action="" name="nomination" method="post" enctype="multipart/form-data" id="uploadForm">';
+				
+				$content .= '<p>Select video to upload:</p>';
+				
+				$content .= '<input type="file" name="fileToUpload" id="fileToUpload" class="demoInputBox" id="userImage">';
+				
+				$content .= '<p><button name="video-submit" value="next" style="margin: 16px 16px 16px 0;">Upload & Next</button>';
+				
+				$content .= '<button name="video-submit" value="end" style="margin: 16px 16px 16px 0;">Skip Upload</button></p>';
+				
+				$content .= '<div id="progress-div"><div id="progress-bar"></div></div><div id="targetLayer"></div>';
+				
+				$content .= '</form>';
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function upload_error() {
+				
+				
+				add_filter( 'the_title', array( $this, 'upload_error_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'upload_error_content' ) );
+				
+				
+			}
+			
+			
+			public function upload_error_title( $title ) {
+				
+				
+				$title = "Upload Error";
+				
+				return $title;
+				
+				
+			}
+			
+			
+			public function upload_error_content( $content ) {
+				
+				
+				$content = '<p>There was an unexpected error when uploading your video.</p><p>The file upload size is limited to 250MB.</p><p>Please try again.</p>';
+				
+				$content .= '<form action="" name="nomination" method="post" enctype="multipart/form-data" id="uploadForm">';
+				
+				$content .= '<p>Select video to upload:</p>';
+				
+				$content .= '<input type="file" name="fileToUpload" id="fileToUpload" class="demoInputBox" id="userImage">';
+				
+				$content .= '<p><button name="video-submit" value="next" style="margin: 16px 16px 16px 0;">Upload & Next</button>';
+				
+				$content .= '<button name="video-submit" value="end" style="margin: 16px 16px 16px 0;">Skip Upload</button></p>';
+				
+				$content .= '<div id="progress-div"><div id="progress-bar"></div></div><div id="targetLayer"></div>';
+				
+				$content .= '</form>';
+				
+				return $content;
+				
+				
+			}
+			
+			
+			public function nominee_confirmation() {
+				
+				
+				add_filter( 'the_title', array( $this, 'nominee_confirmation_title' ) );
+				
+				add_filter( 'the_content', array( $this, 'nominee_confirmation_content' ) );
+				
+				
+			}
+			
+			
+			public function nominee_confirmation_title( $title ) {
+				
+				
+				$title = "Review Submission";
+				
+				return $title;
+				
+				
+			}
+			
+			public function nominee_confirmation_content( $title ) {
+				
+				
+				require( 'ep-award-nominations-model.php' );
+				$newModel = new epAwardNominationsModel;
+				
+				$user = wp_get_current_user();
+				
+				$content = '<p>Here are the fields you entered, please review them and make any changes you need. When you\'re happy with your answers, click on Submit. You can change your answers again later, simply follow through the <a href="/nominee">Nominee Questions</a> again. If you do change anything later, make sure you come back here and press submit again. We\'ll only accept your most recent submission</p>';
+				
+				$content .= '<form method="post" action="">';
+				
+				
+				if ( $newModel->get_nominee_award( $user->ID ) === '1' ) {
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 1, 1 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 1, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change1">Change</button>';
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 1, 2 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 2, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change2">Change</button>';
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 1, 3 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 3, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change3">Change</button>';
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 1, 4 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 4, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change4">Change</button>';
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 1, 5 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 5, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change5">Change</button>';
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 1, 6 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 6, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change6">Change</button>';
+					
+					
+				} elseif ( $newModel->get_nominee_award( $user->ID ) === '2' ) {
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 2, 7 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 7, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change7">Change</button>';
+					
+					
+				} elseif ( $newModel->get_nominee_award( $user->ID ) === '3' ) {
+					
+					
+					$content .= '<h2>' . $newModel->get_question_title( 3, 8 ) . '</h2>';
+					$content .= '<p>' . $newModel->get_answer( 8, $user->ID ) . '</p>';
+					$content .= '<button type="submit" name="change8">Change</button>';
+					
+				}
+				
+				
+				if ( $newModel->has_attachment( $user->ID ) ) {
+					
+					
+					$content .= '<h2>Video Upload</h2>';
+					$content .= '<p>At least one file is uploaded.</p>';
+					$content .= '<button type="submit" name="change9">Change</button>';
+					
+				} else {
+					
+					
+					$content .= '<h2>Video Upload</h2>';
+					$content .= '<p>No files have been uploaded.</p>';
+					$content .= '<button type="submit" name="change9">Change</button>';
+					
+					
+				}
+				
+				
+				$content .= '<hr><p><button type="submit" name="confirm-nominee" style="margin: 16px 16px 16px 0;">Submit</button></p>';
+				
+				$content .= '</form>';
+				
+				return $content;
 				
 			}
 	
