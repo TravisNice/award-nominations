@@ -90,7 +90,7 @@
 		
 			// Setup our own database tables
 		
-		require_once( 'classes/ep-award-nominations-controller.php' );
+		require_once( 'classes/ep-award-nominations-database-controller.php' );
 		
 		$newDatabase = new epAwardNominationsDatabaseController;
 		
@@ -146,7 +146,7 @@
 		
 			//      Delete our database tables
 		
-		require_once( 'classes/ep-award-nominations-controller.php' );
+		require_once( 'classes/ep-award-nominations-database-controller.php' );
 		
 		$oldDatabase = new epAwardNominationsDatabaseController;
 		

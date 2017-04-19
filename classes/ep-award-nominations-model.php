@@ -252,9 +252,9 @@
 				
 				global $wpdb;
 				
-				$result = $wpdb->get_var( "SELECT id FROM {$wpdb->prefix}epan_nominations WHERE nomineeUserID = '" . $userID . "'" );
+				$awardID = $wpdb->get_var( "SELECT awardID FROM {$wpdb->prefix}epan_nominations WHERE nomineeUserID = '" . $userID . "'" );
 				
-				return $result;
+				return $awardID;
 				
 				
 			}
