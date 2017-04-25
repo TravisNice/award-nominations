@@ -301,52 +301,21 @@
 							
 						}
 						
+					} //elseif ( isset ( $_POST[ 'video-submit' ] ) ) {
 						
-					} elseif ( isset( $_FILES["fileToUpload"] ) ) {
+						//	if ( isset( $_FILES['images'] ) ) {
+							
+						//	require( EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-form-handler.php" );
+						//	upload_user_file( $_FILES['images'] );
+								//$this->upload_user_file( $_FILES['videos'] );
+							
+						//}
 						
+						//$this->nominee_confirmation();
 						
-						if ( $_POST[ 'video-submit' ] == "next" ) {
-							
-							$target_dir = EP_AWARD_NOMINATIONS_PATH . "/uploads/";
-							
-							$target_file = $target_dir . uniqid();
-							
-							
-							if ( $_FILES["fileToUpload"]["size"] > 25 ) {
-								
-								$this->video_too_large();
-								
-							}
-							
-							
-							if ( move_uploaded_file( $_FILES["fileToUpload"]["tmp_name"], $target_file ) ) {
-								
-								require( 'ep-award-nominations-model.php' );
-								
-								$newModel = new epAwardNominationsModel;
-								
-								$user = wp_get_current_user();
-								
-								$newModel->insert_attachment( $target_file, $user->ID );
-								
-								
-								$this->nominee_confirmation();
-								
-							} else {
-								
-								$this->upload_error();
-								
-							}
-							
-							
-						} elseif ( $_POST[ 'video-submit' ] == "end" ) {
-							
-							$this->nominee_confirmation();
-							
-						}
-						
-						
-					} elseif ( isset( $_POST[ 'confirm-nominee' ] ) ) {
+						//}
+					
+					elseif ( isset( $_POST[ 'confirm-nominee' ] ) ) {
 						
 						
 						require( 'ep-award-nominations-model.php' );
@@ -601,38 +570,16 @@
 			
 			public function video_upload() {
 				
+				error_log("video_upload");
+				
+				require( EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-form-handler.php" );
+				
 				
 				require( 'ep-award-nominations-view.php' );
 				
 				$newView = new epAwardNominationsView;
 				
 				$newView->video_upload();
-				
-				
-			}
-			
-			
-			public function video_too_large() {
-				
-				
-				require( 'ep-award-nominations-view.php' );
-				
-				$newView = new epAwardNominationsView;
-				
-				$newView->video_too_large();
-				
-				
-			}
-			
-			
-			public function upload_error() {
-				
-				
-				require( 'ep-award-nominations-view.php' );
-				
-				$newView = new epAwardNominationsView;
-				
-				$newView->upload_error();
 				
 				
 			}
@@ -662,7 +609,6 @@
 				
 				
 			}
-			
 			
 		}
 		

@@ -1,32 +1,75 @@
 <?php
 	if (!class_exists('epAwardNominationsView')) {
+		
+		
 		class epAwardNominationsView {
+			
+			
+			public function clean_include( $file ) {
+				
+				
+				ob_start();
+				
+				$content = require( $file );
+				
+				return ob_get_clean();
+				
+				
+			}
+			
+			
 			public function award_view() {
+				
+				
 				add_filter('the_title', array($this, 'award_view_title'));
+				
 				add_filter('the_content', array($this, 'award_view_content'));
+			
+			
 			}
-			public function award_view_title($title) {
+			
+			
+			public function award_view_title( $title ) {
+			
+				
 				$title = "For which award is your nomination?";
+				
 				return $title;
 			}
-			public function award_view_content($content) {
-				require('ep-award-nominations-model.php');
-				$newModel = new epAwardNominationsModel;
-				$allAwards = $newModel->get_all_awards();
-				$content = '<form name="nomination" method="post" action=""><h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="award" value="' . $allAwards[0]->id . '" checked>' . $allAwards[0]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allAwards[0]->description . '</p>';
-				for ($i = 1; $i < $newModel->get_number_awards(); $i++) {
-					$content = $content . '<h2 style="color: #000; font-size: 15px; font-weight: 600; max-width: 300px;"><input style="margin-right: 16px;" type="radio" name="award" value="' . $allAwards[$i]->id . '">' . $allAwards[$i]->title . '</h2><p style="color: #000; font-size: 15px; max-width: 300px;">' . $allAwards[$i]->description . '</p>';
-				}
-				$content .= '<p><input type="submit" value="Next"></p></form>';
+			
+			
+			public function award_view_content( $content ) {
+				
+				
+				$file = EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-award-content.php";
+				
+				$content = $this->clean_include( $file );
+				
 				return $content;
+				
+				
 			}
+			
+			
 			public function category_view() {
+				
+				
 				add_filter( 'the_title', array( $this, 'category_view_title' ) );
+				
 				add_filter( 'the_content', array( $this, 'category_view_content' ) );
+			
+			
 			}
+			
+			
 			public function category_view_title( $title ) {
+			
+				
 				$title = "For which category is your nomination?";
+				
 				return $title;
+			
+			
 			}
 			
 			
@@ -854,20 +897,9 @@
 			
 			public function video_upload() {
 				
-				add_action( 'wp_footer', array( $this, 'video_upload_scripts' ) );
-				
 				add_filter( 'the_title', array( $this, 'video_upload_title' ) );
 				
 				add_filter( 'the_content', array( $this, 'video_upload_content' ) );
-				
-			}
-			
-			
-			public function video_upload_scripts() {
-				
-				$file = EP_AWARD_NOMINATIONS_PATH . "/includes/file-upload-scripts.php";
-				
-				include( $file );
 				
 			}
 			
@@ -886,115 +918,7 @@
 			public function video_upload_content( $content ) {
 				
 				
-				$content = '<p>Here\'s where you can really shine. Upload a short 30 to 90 second video of you, your business, or your products and services. This video counts towards at least 10% of the judges total, depending on the category of your nomination.</p><p>Note: Your video will be put on display the night of the awards ceremony, so put your best foot forward.</p><p>The file upload size is limited to 250MB.</p>';
-				
-				$content .= '<form action="" name="nomination" method="post" enctype="multipart/form-data" id="uploadForm">';
-				
-				$content .= '<p>Select video to upload:</p>';
-								
-				$content .= '<input type="file" name="fileToUpload" id="fileToUpload" class="demoInputBox" id="userImage">';
-				
-				$content .= '<p><button name="video-submit" value="next" style="margin: 16px 16px 16px 0;">Upload & Next</button>';
-				
-				$content .= '<button name="video-submit" value="end" style="margin: 16px 16px 16px 0;">Skip Upload</button></p>';
-				
-				$content .= '<div id="progress-div"><div id="progress-bar"></div></div><div id="targetLayer"></div>';
-				
-				$content .= '</form>';
-				
-				return $content;
-				
-				
-			}
-			
-			
-			public function video_too_large() {
-				
-				
-				add_filter( 'the_title', array( $this, 'video_too_large_title' ) );
-				
-				add_filter( 'the_content', array( $this, 'video_too_large_content' ) );
-				
-				
-			}
-			
-			
-			public function video_too_large_title( $title ) {
-				
-				
-				$title = "Too Big";
-				
-				return $title;
-				
-				
-			}
-			
-			
-			public function video_too_large_content( $content ) {
-				
-				
-				$content = '<p>Your video is too large to upload.</p><p>The file upload size is limited to 250MB.</p><p>Please try again with a smaller file.</p>';
-				
-				$content .= '<form action="" name="nomination" method="post" enctype="multipart/form-data" id="uploadForm">';
-				
-				$content .= '<p>Select video to upload:</p>';
-				
-				$content .= '<input type="file" name="fileToUpload" id="fileToUpload" class="demoInputBox" id="userImage">';
-				
-				$content .= '<p><button name="video-submit" value="next" style="margin: 16px 16px 16px 0;">Upload & Next</button>';
-				
-				$content .= '<button name="video-submit" value="end" style="margin: 16px 16px 16px 0;">Skip Upload</button></p>';
-				
-				$content .= '<div id="progress-div"><div id="progress-bar"></div></div><div id="targetLayer"></div>';
-				
-				$content .= '</form>';
-				
-				return $content;
-				
-				
-			}
-			
-			
-			public function upload_error() {
-				
-				
-				add_filter( 'the_title', array( $this, 'upload_error_title' ) );
-				
-				add_filter( 'the_content', array( $this, 'upload_error_content' ) );
-				
-				
-			}
-			
-			
-			public function upload_error_title( $title ) {
-				
-				
-				$title = "Upload Error";
-				
-				return $title;
-				
-				
-			}
-			
-			
-			public function upload_error_content( $content ) {
-				
-				
-				$content = '<p>There was an unexpected error when uploading your video.</p><p>The file upload size is limited to 250MB.</p><p>Please try again.</p>';
-				
-				$content .= '<form action="" name="nomination" method="post" enctype="multipart/form-data" id="uploadForm">';
-				
-				$content .= '<p>Select video to upload:</p>';
-				
-				$content .= '<input type="file" name="fileToUpload" id="fileToUpload" class="demoInputBox" id="userImage">';
-				
-				$content .= '<p><button name="video-submit" value="next" style="margin: 16px 16px 16px 0;">Upload & Next</button>';
-				
-				$content .= '<button name="video-submit" value="end" style="margin: 16px 16px 16px 0;">Skip Upload</button></p>';
-				
-				$content .= '<div id="progress-div"><div id="progress-bar"></div></div><div id="targetLayer"></div>';
-				
-				$content .= '</form>';
+				$content = $this->clean_include(EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-upload-content.php");
 				
 				return $content;
 				

@@ -22,6 +22,10 @@
 		
 	}
 	
+	error_log("The very beginning");
+	require(EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-form-handler.php");
+	add_action( 'wp_ajax_upload_images', 'upload_images_callback' );
+	add_action( 'wp_ajax_nopriv_upload_images', 'upload_images_callback' );
 	
 	/*
 	 * Functions that are called at installation
@@ -155,9 +159,38 @@
 		
 	}
 	
+	function ep_award_nominations_scripts_setup() {
 	
-	add_filter( 'send_password_change_email', '__return_false' );
-	apply_filters( 'wp_mail_from_name', "Goondiwindi Chamber of Commerce" );
+		
+		$handle = 'epAwardNominationsAjax';
+		
+		$src = plugin_dir_url( __FILE__ ) . '/js/ep-award-nominations-ajax-js.js';
+		
+		$deps = array('jquery');
+		
+		$ver = null;
+		
+		$in_footer = true;
+		
+		wp_register_script( $handle, $src, $deps, $ver, $in_footer );
+		
+		
+		$name = 'localizedScript';
+		
+		$data = array( 'ajaxurl'  => admin_url( 'admin-ajax.php' ) );
+		
+			//$data = array( 'ajaxurl'  => plugin_dir_url( __FILE__ ) . "includes/ep-award-nominations-video-form-handler.php" );
+		
+		wp_localize_script( $handle, $name, $data );
+		
+		
+		wp_enqueue_script( $handle );
+		
+		error_log("enqueue_scripts");
+		
+	}
+	add_action( 'wp_enqueue_scripts', 'ep_award_nominations_scripts_setup' );
+	
 	
 	
 		//      Hand over to the Controller Class
