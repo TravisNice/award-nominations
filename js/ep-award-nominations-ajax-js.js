@@ -5,6 +5,7 @@
 		       nonce = $this.find('#image_upload_nonce').val(),
 		       images_wrap = $('#images_wrap'),
 		       status = $('#status'),
+		       progressBar = $('#progressBar'),
 		       formdata = false;
 		       
 		       if ( $this.find('#images').val() == '' ) {
@@ -44,7 +45,18 @@
 			      } else {
 			      status.fadeIn().text(data.message);
 			      }
+			      },
+			      
+			      xhr: function( event ) {
+			      var xhr = new window.XMLHttpRequest();
+			      xhr.upload.addEventListener("progress", function(event) {
+			      var percent = event.loaded / event.total * 100;
+			      status.fadeIn().text(percent + "% complete");
+			      }, false);
+			      xhr.addEventListener("progress", function(event){ var percent = ((event.loaded / event.total) * 100); status.fadeIn().text( Math.round(percent) + "% complete"); progressBar.val( Math.round(percent) ) ;},false);
+			      return xhr;
 			      }
+			      
 			      });
 		       
 		       });

@@ -1,5 +1,4 @@
 <?php
-	error_log("ep-award-nominations-video-form-handler");
 
 	if ( ! function_exists( 'upload_user_file' ) ) :
 	function upload_user_file( $file = array(), $title = false ) {
@@ -8,6 +7,13 @@
 		if(isset($file_return['error']) || isset($file_return['upload_error_handler'])){
 			return false;
 		}else{
+			
+			$user = wp_get_current_user();
+			
+			require( EP_AWARD_NOMINATIONS_PATH . "/classes/ep-award-nominations-model.php");
+			$newModel = new epAwardNominationsModel;
+			$newModel->insert_attachment( $file_return['url'], $user->ID );
+			
 			$filename = $file_return['file'];
 			$attachment = array(
 					    'post_mime_type' => $file_return['type'],
@@ -57,11 +63,11 @@
 			$files = reArrayFiles($_FILES['files']);
 			if ( empty($_FILES['files']) ) {
 				$data['status'] = false;
-				$data['message'] = __('Please select an image to upload!','twentysixteen');
-			} elseif ( $files[0]['size'] > 33554432 ) { // Maximum image size is 32M
+				$data['message'] = __('Please select a video to upload!','twentysixteen');
+			} elseif ( $files[0]['size'] > 268435456 ) { // Maximum image size is 250M
 				$data['size'] = $files[0]['size'];
 				$data['status'] = false;
-				$data['message'] = __('Image is too large. It must be less than 32M!','twentysixteen');
+				$data['message'] = __('video is too large. It must be less than 250M!','twentysixteen');
 			} else {
 				$i = 0;
 				$data['message'] = '';
@@ -83,7 +89,7 @@
 				}
 				if( ! $attachment_ids ){
 					$data['status'] = false;
-					$data['message'] = __('An error has occured. Your image was not added.','twentysixteen');
+					$data['message'] = __('An error has occured. Your video was not added.','twentysixteen');
 				}
 			}
 		} else {

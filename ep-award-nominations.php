@@ -22,7 +22,6 @@
 		
 	}
 	
-	error_log("The very beginning");
 	require(EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-form-handler.php");
 	add_action( 'wp_ajax_upload_images', 'upload_images_callback' );
 	add_action( 'wp_ajax_nopriv_upload_images', 'upload_images_callback' );
@@ -186,7 +185,6 @@
 		
 		wp_enqueue_script( $handle );
 		
-		error_log("enqueue_scripts");
 		
 	}
 	add_action( 'wp_enqueue_scripts', 'ep_award_nominations_scripts_setup' );

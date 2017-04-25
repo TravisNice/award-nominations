@@ -570,9 +570,8 @@
 			
 			public function video_upload() {
 				
-				error_log("video_upload");
 				
-				require( EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-form-handler.php" );
+					//				require( EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-form-handler.php" );
 				
 				
 				require( 'ep-award-nominations-view.php' );
