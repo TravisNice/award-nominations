@@ -301,12 +301,19 @@
 							
 						}
 						
-					} elseif ( isset ( $_POST[ 'video-submit' ] ) ) {
+					} //elseif ( isset ( $_POST[ 'video-submit' ] ) ) {
 						
-							if ( $_POST[ 'video-submit' ] == "next" ) {
-								$this->nominee_confirmation();
-							}
-					}
+						//	if ( isset( $_FILES['images'] ) ) {
+							
+						//	require( EP_AWARD_NOMINATIONS_PATH . "/includes/ep-award-nominations-video-form-handler.php" );
+						//	upload_user_file( $_FILES['images'] );
+								//$this->upload_user_file( $_FILES['videos'] );
+							
+						//}
+						
+						//$this->nominee_confirmation();
+						
+						//}
 					
 					elseif ( isset( $_POST[ 'confirm-nominee' ] ) ) {
 						
@@ -321,10 +328,6 @@
 						$to = "travis.nice@everydaypublishing.com.au,chamber@goondiwindi.qld.au";
 						
 						$subject = "Submitted Nominee Questions";
-						
-						$header = "Content-Type: text/html;";
-						
-						
 						
 						$message  = "This is the submission from " . $newModel->get_nominee_name( $user->ID ) . PHP_EOL . PHP_EOL;
 						

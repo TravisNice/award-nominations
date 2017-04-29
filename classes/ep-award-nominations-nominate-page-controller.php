@@ -156,27 +156,9 @@
 					
 					$to = "travis.nice@everydaypublishing.com.au,chamber@goondiwindi.qld.au";
 					
-					$subject = "You have been nominated for the 2017 Goondiwindi Business Awards";
+					$subject = "New Nomination";
 					
-					$header = "Content-Type: text/html;";
-					
-					$message = '<body style="background-color: #eee;"><div style="left; width: 80%; max=-width: 600px; margin: auto; padding: 32px; background-color: #fff; border:2px solid #000; font-family: Arial, sans-serif; font-size: 15px; color: #333;"><a href=""><img width="100%" src="https://www.goondiwindichamber.com.au/wp-content/uploads/2017/04/goondiwnidi-chamber-logo-green.png" alt="Goondiwindi Chamber of Commerce"></a>';
-					
-					$message .= '<p>Dear ' . $_SESSION[ 'nominee-name' ] . ',</p>';
-					
-					$message .= '<p>Congratulations, your business has been nominated for the 2017 Lowes Petroleum Goondiwindi Business Awards.</p>';
-					
-					$message .= '<p>Your nominations is:<br>Name: ' . $_SESSION[ 'nominee-name' ] . '<br>Award: ' . $newModel->get_award_title( $_SESSION[ 'award' ] ) . '<br>Category: ' . $newModel->get_category_title( $_SESSION[ 'category' ] ) .'</p>';
-					
-					$message .= '<p>To be eligible to win, you must complete the Nominee Question by <a href="https://www.goondiwindichamber.com.au/my-account">logging in to our website</a>.</p>';
-					
-					$message .= '<p>You must use the unique username and password provided.<br>Username: ' . $newModel->get_nominee_login( $userID ) . '<br>Password: ' . $password . '</p>';
-					
-					$message .= '<p>Once you\'re logged in, you can access the <a href="https://www.goondiwindichamber.com.au/nominee">questionnaire here</a>, or by select the Business Awards menu, and then Nominee Questionnaire.</p><p>Be sure to save as you go and you can come back at any time.</p><p>This year you also have the option to submit a 30 to 90 second video presentation to compliment your submission. Be as creative as you like! This accounts to 10% of your score, however is not essential.</p><p>The Lowes Petroleum Business Awards Gala Event is on the 2nd June, 2017 with special guest Dr. Rolf Gomes! Be sure to like our Goondiwindi Chamber of Commerce Facebook page for all of the updates!</p><p>Kindest Regards,</p><p>Brooke Saxby<br>Executive Officer<br>Goondiwindi Chamber of Commerce</p>';
-					
-					$message .= '</div></body>';
-					
-					/*$message  = "Nominee: " . $_SESSION[ 'nominee-name' ] . PHP_EOL;
+					$message  = "Nominee: " . $_SESSION[ 'nominee-name' ] . PHP_EOL;
 					$message .= "Award: " . $newModel->get_award_title( $_SESSION[ 'award' ] ) . PHP_EOL;
 					$message .= "Category: " . $newModel->get_category_title( $_SESSION[ 'category' ] ) . PHP_EOL;
 					$message .= "Reason: " . $_SESSION[ 'nominee-reason' ] . PHP_EOL;
@@ -186,9 +168,9 @@
 					$message .= "Contact: " . $_SESSION[ 'nominator-phone' ] . " or " . $_SESSION[ 'nominator-email' ];
 					$message .= PHP_EOL;
 					$message .= "This nomination was assigned user (login) name: " . $newModel->get_nominee_login( $userID ) . PHP_EOL;
-					$message .= "        With Password: " . $password . PHP_EOL;*/
+					$message .= "        With Password: " . $password . PHP_EOL;
 					
-					wp_mail( $to, $subject, $message, $header );
+					wp_mail( $to, $subject, $message );
 					
 					
 					$this->thank_you_page();

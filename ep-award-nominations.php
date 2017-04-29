@@ -163,7 +163,7 @@
 		
 		$handle = 'epAwardNominationsAjax';
 		
-		$src = plugin_dir_url( __FILE__ ) . 'js/ep-award-nominations-ajax-js.js';
+		$src = plugin_dir_url( __FILE__ ) . '/js/ep-award-nominations-ajax-js.js';
 		
 		$deps = array('jquery');
 		
