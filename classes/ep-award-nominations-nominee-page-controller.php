@@ -365,6 +365,12 @@
 						$this->thank_you_page();
 						
 						
+					} elseif ( isset ( $_POST[ 'video-submit' ] ) ) {
+						
+						if ( $_POST[ 'video-submit' ] == "next" ) {
+							$this->nominee_confirmation();
+						}
+						
 					} elseif ( isset( $_POST[ 'change1' ] ) ){
 							
 						$this->question_one( $currentUser );

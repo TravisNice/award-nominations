@@ -79,6 +79,16 @@
 				
 				
 				}
+				
+				elseif ( get_the_ID() == 448 ) {
+					
+					
+					require('ep-award-nominations-control-judges-page.php');
+					
+					if ( in_the_loop() ) $newPage = new epAwardNominationsControlJudgesPage;
+					
+					
+				}
 			
 			
 			}

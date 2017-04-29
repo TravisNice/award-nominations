@@ -377,6 +377,21 @@
 			}
 			
 			
+			
+			
+			public function get_attachment( $userID ) {
+				
+				
+				global $wpdb;
+				
+				$count = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}epan_attachments WHERE userID ='" . $userID . "'" );
+				
+				return $count;
+				
+				
+			}
+			
+			
 			public function get_nominee_name( $userID ) {
 				
 				
@@ -389,6 +404,35 @@
 				
 			}
 			
+			public function get_number_of_nominations() {
+				global $wpdb;
+				$count = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}epan_nominations");
+				return $count;
+			}
+			
+			public function get_nomination($id) {
+				global $wpdb;
+				$nomination = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}epan_nominations WHERE nomineeUserID='" . $id . "'");
+				return $nomination;
+			}
+			
+			public function get_all_nominations() {
+				global $wpdb;
+				$nominations = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}epan_nominations ORDER BY nominee");
+				return $nominations;
+			}
+			
+			public function nominee_has_answers($userID) {
+				global $wpdb;
+				$count = $wpdb->get_var("SELECT COUNT(id) FROM {$wpdb->prefix}epan_answers WHERE userID='" . $userID . "'");
+				return $count;
+			}
+			
+			public function get_nominee_answers($userID) {
+				global $wpdb;
+				$answers = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}epan_answers WHERE userID='" . $userID . "'");
+				return $answers;
+			}
 			
 		}
 		
