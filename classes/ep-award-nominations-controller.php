@@ -80,7 +80,7 @@
 				
 				}
 				
-				elseif ( get_the_ID() == 448 ) {
+				elseif ( get_the_ID() == 448 || get_the_ID() == 838 ) {
 					
 					
 					require('ep-award-nominations-control-judges-page.php');

@@ -2,8 +2,8 @@
 	include(EP_AWARD_NOMINATIONS_PATH.'/classes/ep-award-nominations-model.php');
 	$newModel = new epAwardNominationsModel;
 	$nomination = $newModel->get_nomination($_POST['answers']);
-	$answers = $newModel->get_nominee_answers($_POST['answers']);
-	$attachments = $newModel->get_attachment($_POST['answers']);
+	$answers = $newModel->get_nominee_answers($nomination[0]->nomineeUserID);
+	$attachments = $newModel->get_attachment($nomination[0]->nomineeUserID);
 ?>
 
 
@@ -27,7 +27,7 @@
 
 
 <table><thead><tr><th colspan="2">Attachments</th></tr></thead><tbody>
-<?php if ($newModel->has_attachment($_POST['answers'])) {
+<?php if ($newModel->has_attachment($nomination[0]->nomineeUserID)) {
 	foreach($attachments as $attachment) { ?>
 		<tr>
 			<td><?php echo $attachment->id; ?></td>

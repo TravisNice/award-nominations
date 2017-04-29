@@ -2,7 +2,7 @@
 	include(EP_AWARD_NOMINATIONS_PATH.'/classes/ep-award-nominations-model.php');
 	$newModel = new epAwardNominationsModel;
 	$countNominations = $newModel->get_number_of_nominations();
-	$nominations = $newModel->get_all_nominations();
+	$nominations = $newModel->get_nomination($_POST['id']);
 ?>
 
 <table>
@@ -21,10 +21,10 @@
 	</tbody>
 		<tr>
 			<td><?php echo $_POST['id']; ?></td>
-			<td><?php echo $newModel->get_award_title($nominations[$_POST['id'] - 1]->awardID); ?></td>
-			<td><?php echo $newModel->get_category_title($nominations[$_POST['id'] - 1]->categoryID); ?></td>
-			<td><?php echo $nominations[$_POST['id'] - 1]->nominee; ?></td>
-			<td><?php echo $nominations[$_POST['id'] - 1]->nomineeContact; ?></td>
+			<td><?php echo $newModel->get_award_title($nominations[0]->awardID); ?></td>
+			<td><?php echo $newModel->get_category_title($nominations[0]->categoryID); ?></td>
+			<td><?php echo $nominations[0]->nominee; ?></td>
+			<td><?php echo $nominations[0]->nomineeContact; ?></td>
 		</tr>
 	</tbody>
 </table>
@@ -37,7 +37,7 @@
 	</thead>
 	</tbody>
 		<tr>
-			<td><?php echo $nominations[$_POST['id'] - 1]->reason; ?></td>
+			<td><?php echo $nominations[0]->reason; ?></td>
 		</tr>
 	</tbody>
 </table>
@@ -55,9 +55,9 @@
 	</thead>
 	</tbody>
 		<tr>
-			<td><?php echo $nominations[$_POST['id'] - 1]->nominatorFirst . " " . $nominations[$_POST['id'] - 1]->nominatorLast; ?></td>
-			<td><?php echo $nominations[$_POST['id'] - 1]->nominatorEmail; ?></td>
-			<td><?php echo $nominations[$_POST['id'] - 1]->nominatorPhone; ?></td>
+			<td><?php echo $nominations[0]->nominatorFirst . " " . $nominations[0]->nominatorLast; ?></td>
+			<td><?php echo $nominations[0]->nominatorEmail; ?></td>
+			<td><?php echo $nominations[0]->nominatorPhone; ?></td>
 		</tr>
 	</tbody>
 </table>

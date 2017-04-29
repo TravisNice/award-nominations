@@ -412,7 +412,7 @@
 			
 			public function get_nomination($id) {
 				global $wpdb;
-				$nomination = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}epan_nominations WHERE nomineeUserID='" . $id . "'");
+				$nomination = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}epan_nominations WHERE id='" . $id . "'");
 				return $nomination;
 			}
 			

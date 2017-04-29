@@ -31,7 +31,7 @@
 				<td><?php echo $nomination->nominee; ?></td>
 				<td><?php echo $nomination->nomineeContact; ?></td>
 				<td><?php if ($newModel->nominee_has_answers($nomination->nomineeUserID)) { ?>
-					<button type="submit" name="answers" value="<?php echo $nomination->nomineeUserID; ?>">View</button>
+					<button type="submit" name="answers" value="<?php echo $nomination->id; ?>">View</button>
 				    <?php } else { ?>
 					&nbsp;
 				    <?php } ?>
